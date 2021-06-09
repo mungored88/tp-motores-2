@@ -10,9 +10,7 @@ public class MapGenScript : MonoBehaviour {
     public GameObject prefabFloor;
     public GameObject prefabWall;
     public GameObject prefabCurveL;
-    public GameObject prefabDiagonal;
 	public GameObject prefabCollumn;
-    public GameObject prefabCeiling;
     public Texture2D Map;
 
     private int width;
@@ -35,10 +33,6 @@ public class MapGenScript : MonoBehaviour {
                     GameObject inst = GameObject.Instantiate(prefabFloor, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                 }
-                if (pixelColor == Color.cyan) { //Ceiling
-                    GameObject inst = GameObject.Instantiate(prefabCeiling, trans);
-                    inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
-                }
                 if (pixelColor == Color.red) //Wall
                 {
                     GameObject inst = GameObject.Instantiate(prefabWall, trans);
@@ -50,11 +44,6 @@ public class MapGenScript : MonoBehaviour {
                     GameObject inst = GameObject.Instantiate(prefabCurveL, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationL(pixels, i, j), 0), Space.Self);
-                }
-				if (pixelColor == Color.magenta) //Diagonal
-                {
-                    GameObject inst = GameObject.Instantiate(prefabDiagonal, trans);
-                    inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                 }
 				if (pixelColor == Color.blue) //Collumn
 				{
@@ -71,14 +60,14 @@ public class MapGenScript : MonoBehaviour {
         
 		float Rotation = 0f;
 		
-		if (i-1>=0 && (pixels[(i-1)*height + j]== Color.black || pixels[(i-1)*height + j]== Color.cyan)){
+		if (i-1>=0 && (pixels[(i-1)*height + j]== Color.black)){
 			Rotation = 90f;
 		}
 		
-		else if (j-1>=0 && (pixels[i*height + (j-1)]==Color.black || pixels[i*height + (j-1)]==Color.cyan)){
+		else if (j-1>=0 && (pixels[i*height + (j-1)]==Color.black)){
 			Rotation = 180f;
 		}
-		else if (i+1<height && (pixels[(i+1)*height + j]==Color.black || pixels[(i+1)*height + j]==Color.cyan)){
+		else if (i+1<height && (pixels[(i+1)*height + j]==Color.black)){
 			Rotation = -90f;
 		}
 		return Rotation;
@@ -89,12 +78,12 @@ public class MapGenScript : MonoBehaviour {
 		
 		float Rotation = 0f;
 		
-		if(i-1>=0 && j+1<width && (pixels[(i-1)*height+(j+1)]==Color.black || pixels[(i-1)*height+(j+1)]==Color.cyan))
+		if(i-1>=0 && j+1<width && (pixels[(i-1)*height+(j+1)]==Color.black))
 			Rotation = 90f;
 		
-		else if (i-1>=0 && j-1>=0 && (pixels[(i-1)*height+(j-1)]==Color.black || pixels[(i-1)*height+(j-1)]==Color.cyan))
+		else if (i-1>=0 && j-1>=0 && (pixels[(i-1)*height+(j-1)]==Color.black))
 			Rotation = 180f;
-		else if (i+1<height && j-1>=0 && (pixels[(i+1)*height+(j-1)]==Color.black || pixels[(i+1)*height+(j-1)]==Color.cyan))
+		else if (i+1<height && j-1>=0 && (pixels[(i+1)*height+(j-1)]==Color.black))
 			Rotation = -90f;
 		return Rotation;
 	}
@@ -104,12 +93,12 @@ public class MapGenScript : MonoBehaviour {
 		//posicion por default
 		float rotation = 0;
 		//Negro a la derecha y abajo
-		if (((pixels[i * height + j - 1] == Color.black || pixels[i * height + j - 1] == Color.cyan)) && ((pixels[(i - 1) * height + j] == Color.black) || (pixels[(i - 1) * height + j] == Color.cyan)))
+		if (((pixels[i * height + j - 1] == Color.black)) && ((pixels[(i - 1) * height + j] == Color.black)))
 			rotation = 180;
 		//Negro arriba y a la izquierda
-		if (((pixels[i * height + j - 1] == Color.black) || (pixels[i * height + j - 1] == Color.cyan)) && ((pixels[(i+1) * height + j] == Color.black) || (pixels[(i+1) * height + j] == Color.cyan)))
+		if (((pixels[i * height + j - 1] == Color.black)) && ((pixels[(i+1) * height + j] == Color.black)))
 			rotation = -90;
-		if (((pixels[i * height + j + 1] == Color.black) || (pixels[i * height + j + 1] == Color.cyan)) && ((pixels[(i - 1) * height + j] == Color.black) || (pixels[(i - 1) * height + j] == Color.cyan)))
+		if (((pixels[i * height + j + 1] == Color.black)) && ((pixels[(i - 1) * height + j] == Color.black)))
 			rotation = 90;
 		return rotation;
 	}

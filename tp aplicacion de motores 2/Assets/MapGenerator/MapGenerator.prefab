@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968571676201028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -38.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,15 +45,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trans: {fileID: 0}
   TileDimension: 4
-  prefabFloor: {fileID: 1316661190979104, guid: 8e160f7d978fcdc40aeb8f52a1d92e32,
+  prefabFloor: {fileID: 1316661190979104, guid: 43f8e35d51f9d774eb87f290b86a9649,
     type: 3}
-  prefabWall: {fileID: 1655673125402110, guid: 9f639d4c344e20b40992b371203aeefe, type: 3}
-  prefabCurveL: {fileID: 1840828261763088, guid: 3ddde356c11801b41a08e1fa6b34026a,
+  prefabWall: {fileID: 1655673125402110, guid: 718a8c0341a6b744581a10dfd1105f88, type: 3}
+  prefabCurveL: {fileID: 1840828261763088, guid: 12115f3e2bc7884449890b084af37f7a,
     type: 3}
-  prefabDiagonal: {fileID: 1118157281631126, guid: 727515880f163a3409a4fe57e4e5078c,
+  prefabDiagonal: {fileID: 1118157281631126, guid: d4927b04328e0514c9e6ba171ac27d25,
     type: 3}
-  prefabCollumn: {fileID: 1332032387223852, guid: a95bd9a96c534ca43a6fbee8dc72a9f8,
+  prefabCollumn: {fileID: 1332032387223852, guid: 7f951c1ab0c98544dbb2241f27da4db5,
     type: 3}
-  prefabCeiling: {fileID: 1757992522787278, guid: f087276146114d54f82b64606fd418e3,
+  prefabCeiling: {fileID: 1757992522787278, guid: bdd814361eb33b142b6b8bc75fb0922b,
     type: 3}
-  Map: {fileID: 2800000, guid: 530d98860419b9142a7f3b625ccd2ae0, type: 3}
+  Map: {fileID: 2800000, guid: 8f4881ba6ffc2ce48a096f26b3b36bca, type: 3}
