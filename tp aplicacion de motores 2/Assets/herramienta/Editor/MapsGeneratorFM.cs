@@ -5,65 +5,87 @@ using UnityEditor;
 
 public class MapsGeneratorFM : EditorWindow
 {
-    
-    Material textura;
-    Vector3 MaPosition;
+    Material levelMaterial;
     GameObject GoPrefab;
-    Texture2D Map2D;
+    int i = 0;
 
     public Transform trans;
     public float TileDimension = 4f;
 
     public GameObject prefabFloor;
     public GameObject prefabWall;
-    public GameObject prefabCurveL;
+    public GameObject prefabCorner;
     public GameObject prefabCollumn;
-   
+    public GameObject prefabCenterC;
+    public Texture2D  Map2D;
 
     private int width;
     private int height;
 
     [MenuItem("Custom/MapsGFM")]
+
     public static void OpenWindow()
     {
         var window = GetWindow(typeof(MapsGeneratorFM));
         window.Show();
     }
+
     private void OnEnable()
     {
         CheckEvent();
-       
     }
+
     private void OnGUI()
-     {
-        GUILayout.Label("- Insert Map Texture", EditorStyles.boldLabel);
+    {
+        EditorGUILayout.Space();
+        GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" White || Floor", GUILayout.Width(150));
+            prefabFloor = EditorGUILayout.ObjectField(prefabFloor, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" Red || Wall", GUILayout.Width(150));
+            prefabWall = EditorGUILayout.ObjectField(prefabWall, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" Green || Outer Corner", GUILayout.Width(150));
+            prefabCorner = EditorGUILayout.ObjectField(prefabCorner, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" Blue || Collumn", GUILayout.Width(150));
+            prefabCollumn = EditorGUILayout.ObjectField(prefabCollumn, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" Cyan || Center Collumn", GUILayout.Width(150));
+            prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
+        GUILayout.Label("- Insert Map Blueprint", EditorStyles.boldLabel);
         Map2D = EditorGUILayout.ObjectField(Map2D, typeof(Texture2D), true) as Texture2D;
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
 
-        
+        EditorGUILayout.Space();
         GUILayout.Label("- Insert Material", EditorStyles.boldLabel);
-        textura = EditorGUILayout.ObjectField(textura, typeof(Material), true) as Material;
+        levelMaterial = EditorGUILayout.ObjectField(levelMaterial, typeof(Material), true) as Material;
 
         EditorGUILayout.Space();
-
-       
-        GUILayout.Label("- Insert Inicial Position", EditorStyles.boldLabel);
-        MaPosition = EditorGUILayout.Vector3Field("Posicion", MaPosition);
-            
-       if (GUILayout.Button("Generar"))
+        if (GUILayout.Button("Generate"))
         {
-            GenerateMap();
+            EmptyObjectDad();
         }
-        
-     
 
-        if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Prefab"))
+        if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Make Prefab"))
         {
             GetWindow(typeof(CustomPrefab)).Show();
         }
 
     }
+
     void CheckEvent()
     {
         minSize = new Vector2(300, 300);
@@ -73,32 +95,22 @@ public class MapsGeneratorFM : EditorWindow
     //Creo el mapa adentro de un empty object
     private void EmptyObjectDad()
     {
-        if (GoPrefab == null)
-        {
-            GoPrefab = new GameObject("Map");
-        }
-        GameObject Maps = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        Maps.transform.position = MaPosition;
-        Maps.transform.parent = GoPrefab.transform;
-
-        Maps.GetComponent<MeshRenderer>().material = textura;
-        MaterialChange();
+        GameObject level = new GameObject("Level" + i++);
+        GenerateMap(level);
     }
+
     // Cambio el material
     void MaterialChange()
     {
         foreach (GameObject obj in Selection.gameObjects)
         {
             Material mat = obj.GetComponent<Material>();
-          
         }
     }
 
-    // Genero mapas segun su prefab
-    private void GenerateMap()
+    // Genero mapas segun un plano
+    private void GenerateMap(GameObject level)
     {
-       EmptyObjectDad();
-
         float multiplierFactor = TileDimension + float.Epsilon;
         width = Map2D.width;
         height = Map2D.height;
@@ -109,43 +121,67 @@ public class MapsGeneratorFM : EditorWindow
             {
                 Color pixelColor = pixels[i * height + j];
                 if (pixelColor == Color.white)
-                { //Floor
+                {                              //Floor
                     GameObject inst = GameObject.Instantiate(prefabFloor, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
+                    inst.transform.parent = level.transform;
+                    getMaterial(inst);
                 }
-                if (pixelColor == Color.red) //Wall
+                if (pixelColor == Color.red)   //Wall
                 {
                     GameObject inst = GameObject.Instantiate(prefabWall, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationW(pixels, i, j), 0), Space.Self);
+                    inst.transform.parent = level.transform;
+                    getMaterial(inst);
                 }
-                if (pixelColor == Color.green) //Retangular L Curve
+                if (pixelColor == Color.green) //Corner
                 {
-                    GameObject inst = GameObject.Instantiate(prefabCurveL, trans);
+                    GameObject inst = GameObject.Instantiate(prefabCorner, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationL(pixels, i, j), 0), Space.Self);
+                    inst.transform.parent = level.transform;
+                    getMaterial(inst);
                 }
                 if (pixelColor == Color.blue) //Collumn
                 {
                     GameObject inst = GameObject.Instantiate(prefabCollumn, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationC(pixels, i, j), 0), Space.Self);
+                    inst.transform.parent = level.transform;
+                    getMaterial(inst);
+                }
+                if (pixelColor == Color.cyan) //Center Collumn
+                { 
+                    GameObject inst = GameObject.Instantiate(prefabCenterC, trans);
+                    inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
+                    inst.transform.parent = level.transform;
+                    getMaterial(inst);
                 }
             }
         }
     }
 
+    private void getMaterial(GameObject inst)
+    {
+        MeshRenderer[] meshes;
+        meshes = inst.GetComponentsInChildren<MeshRenderer>();
+        foreach(MeshRenderer mesh in meshes)
+        {
+            mesh.material = levelMaterial;
+        }
+        MaterialChange();
+    }
+
     //rotacion pared
     private float FindRotationW(Color[] pixels, int i, int j)
     {
-
         float Rotation = 0f;
 
         if (i - 1 >= 0 && (pixels[(i - 1) * height + j] == Color.black))
         {
             Rotation = 90f;
         }
-
         else if (j - 1 >= 0 && (pixels[i * height + (j - 1)] == Color.black))
         {
             Rotation = 180f;
@@ -160,12 +196,10 @@ public class MapsGeneratorFM : EditorWindow
     //rotacion columna
     private float FindRotationC(Color[] pixels, int i, int j)
     {
-
         float Rotation = 0f;
 
         if (i - 1 >= 0 && j + 1 < width && (pixels[(i - 1) * height + (j + 1)] == Color.black))
             Rotation = 90f;
-
         else if (i - 1 >= 0 && j - 1 >= 0 && (pixels[(i - 1) * height + (j - 1)] == Color.black))
             Rotation = 180f;
         else if (i + 1 < height && j - 1 >= 0 && (pixels[(i + 1) * height + (j - 1)] == Color.black))
