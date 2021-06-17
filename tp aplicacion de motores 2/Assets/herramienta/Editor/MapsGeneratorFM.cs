@@ -41,27 +41,27 @@ public class MapsGeneratorFM : EditorWindow
         GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" White || Floor", GUILayout.Width(150));
+            GUILayout.Label(" White || Floor", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabFloor = EditorGUILayout.ObjectField(prefabFloor, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" Red || Wall", GUILayout.Width(150));
+            GUILayout.Label(" Red || Wall", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabWall = EditorGUILayout.ObjectField(prefabWall, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" Green || Outer Corner", GUILayout.Width(150));
+            GUILayout.Label(" Green || Outer Corner", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabCorner = EditorGUILayout.ObjectField(prefabCorner, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" Blue || Collumn", GUILayout.Width(150));
+            GUILayout.Label(" Blue || Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabCollumn = EditorGUILayout.ObjectField(prefabCollumn, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" Cyan || Center Collumn", GUILayout.Width(150));
+            GUILayout.Label(" Cyan || Center Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
