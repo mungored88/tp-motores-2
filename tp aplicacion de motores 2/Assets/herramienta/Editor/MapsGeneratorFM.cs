@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityEditor;
 
@@ -8,6 +9,8 @@ public class MapsGeneratorFM : EditorWindow
     Material levelMaterial;
     GameObject GoPrefab;
     int i = 0;
+
+    AnimBool animBool;
 
     public Transform trans;
     public float TileDimension = 4f;
@@ -33,10 +36,24 @@ public class MapsGeneratorFM : EditorWindow
     private void OnEnable()
     {
         CheckEvent();
+        animBool = new AnimBool(false); //Creación de nuestra clase para poder animar cosas.
+        animBool.valueChanged.AddListener(Repaint);
     }
 
     private void OnGUI()
     {
+        EditorGUILayout.Space();
+        animBool.target = EditorGUILayout.Foldout(animBool.target, "- Tutorial"); //flecha para ocultar cosas
+        if (animBool.target == true)
+        {
+            EditorGUILayout.BeginFadeGroup(animBool.faded); //Esto es para agregarle animación a nuestro foldOut
+            GUILayout.Label("1- Inserta los prefab en la ranura Prefab de cada color");
+            GUILayout.Label("2- Inserta una textura del mapa deseado en la ranura Map blueprint");
+            GUILayout.Label("3- Inserta un material en la ranura Material");
+            GUILayout.Label("4- Pulsa Generar para visualizar tu mapa");
+            EditorGUILayout.EndFadeGroup();
+        }
+
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
 
@@ -71,14 +88,25 @@ public class MapsGeneratorFM : EditorWindow
 
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Material", EditorStyles.boldLabel);
+      
         levelMaterial = EditorGUILayout.ObjectField(levelMaterial, typeof(Material), true) as Material;
-
         EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUI.DrawRect(GUILayoutUtility.GetRect(100, 2), Color.black);
+        EditorGUILayout.Space();
+        GUILayout.BeginHorizontal();
+        GUI.DrawTexture(GUILayoutUtility.GetRect(5,35), (Texture)Resources.Load("map"), ScaleMode.StretchToFill);
         if (GUILayout.Button("Generate"))
         {
             EmptyObjectDad();
         }
+        GUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
+        EditorGUI.DrawRect(GUILayoutUtility.GetRect(100, 2), Color.black);
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+       
         if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Make Prefab"))
         {
             GetWindow(typeof(CustomPrefab)).Show();
@@ -88,8 +116,8 @@ public class MapsGeneratorFM : EditorWindow
 
     void CheckEvent()
     {
-        minSize = new Vector2(300, 300);
-        maxSize = new Vector3 (300, 300);
+        minSize = new Vector2(400, 350);
+        maxSize = new Vector3 (400, 350);
     }
 
     //Creo el mapa adentro de un empty object
