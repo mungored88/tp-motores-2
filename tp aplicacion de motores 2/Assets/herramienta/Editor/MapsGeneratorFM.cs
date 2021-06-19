@@ -51,6 +51,10 @@ public class MapsGeneratorFM : EditorWindow
             GUILayout.Label("2- Inserta una textura del mapa deseado en la ranura Map blueprint");
             GUILayout.Label("3- Inserta un material en la ranura Material");
             GUILayout.Label("4- Pulsa Generar para visualizar tu mapa");
+            if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Mas info"))
+            {
+                GetWindow(typeof(Tutotial)).Show();
+            }
             EditorGUILayout.EndFadeGroup();
         }
 
