@@ -6,10 +6,7 @@ using UnityEditor;
 
 public class MapsGeneratorFM : EditorWindow
 {
-    Material levelMaterial;
-    GameObject GoPrefab;
     int i = 0;
-
     AnimBool animBool;
 
     public Transform trans;
@@ -19,6 +16,7 @@ public class MapsGeneratorFM : EditorWindow
     public GameObject prefabWall;
     public GameObject prefabCorner;
     public GameObject prefabCollumn;
+    public GameObject prefabFullCollumn;
     public GameObject prefabCenterC;
     public Texture2D  Map2D;
 
@@ -47,10 +45,9 @@ public class MapsGeneratorFM : EditorWindow
         if (animBool.target == true)
         {
             EditorGUILayout.BeginFadeGroup(animBool.faded); //Esto es para agregarle animación a nuestro foldOut
-            GUILayout.Label("1- Inserta los prefab en la ranura Prefab de cada color");
-            GUILayout.Label("2- Inserta una textura del mapa deseado en la ranura Map blueprint");
-            GUILayout.Label("3- Inserta un material en la ranura Material");
-            GUILayout.Label("4- Pulsa Generar para visualizar tu mapa");
+
+            GUI.DrawTexture(GUILayoutUtility.GetRect(80, 120), (Texture)Resources.Load("Mini Tutorial"), ScaleMode.ScaleToFit);
+
             if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Mas info"))
             {
                 GetWindow(typeof(Tutotial)).Show();
@@ -86,31 +83,24 @@ public class MapsGeneratorFM : EditorWindow
             prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(" MAgenta || Full Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
+            prefabFullCollumn = EditorGUILayout.ObjectField(prefabFullCollumn, typeof(GameObject), true) as GameObject;
+            GUILayout.EndHorizontal();
+
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Map Blueprint", EditorStyles.boldLabel);
         Map2D = EditorGUILayout.ObjectField(Map2D, typeof(Texture2D), true) as Texture2D;
-
-        EditorGUILayout.Space();
-        GUILayout.Label("- Insert Material", EditorStyles.boldLabel);
-      
-        levelMaterial = EditorGUILayout.ObjectField(levelMaterial, typeof(Material), true) as Material;
+        
         EditorGUILayout.Space();
         EditorGUILayout.Space();
-        EditorGUI.DrawRect(GUILayoutUtility.GetRect(100, 2), Color.black);
-        EditorGUILayout.Space();
-        GUILayout.BeginHorizontal();
-        GUI.DrawTexture(GUILayoutUtility.GetRect(5,35), (Texture)Resources.Load("map"), ScaleMode.StretchToFill);
         if (GUILayout.Button("Generate"))
         {
             EmptyObjectDad();
         }
-        GUILayout.EndHorizontal();
-        EditorGUILayout.Space();
 
-        EditorGUI.DrawRect(GUILayoutUtility.GetRect(100, 2), Color.black);
         EditorGUILayout.Space();
         EditorGUILayout.Space();
-       
         if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Make Prefab"))
         {
             GetWindow(typeof(CustomPrefab)).Show();
@@ -157,7 +147,6 @@ public class MapsGeneratorFM : EditorWindow
                     GameObject inst = GameObject.Instantiate(prefabFloor, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.parent = level.transform;
-                    getMaterial(inst);
                 }
                 if (pixelColor == Color.red)   //Wall
                 {
@@ -165,7 +154,6 @@ public class MapsGeneratorFM : EditorWindow
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationW(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
-                    getMaterial(inst);
                 }
                 if (pixelColor == Color.green) //Corner
                 {
@@ -173,7 +161,6 @@ public class MapsGeneratorFM : EditorWindow
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationL(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
-                    getMaterial(inst);
                 }
                 if (pixelColor == Color.blue) //Collumn
                 {
@@ -181,28 +168,21 @@ public class MapsGeneratorFM : EditorWindow
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationC(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
-                    getMaterial(inst);
                 }
                 if (pixelColor == Color.cyan) //Center Collumn
                 { 
                     GameObject inst = GameObject.Instantiate(prefabCenterC, trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.parent = level.transform;
-                    getMaterial(inst);
+                }
+                if (pixelColor == Color.magenta) //Full Collumn
+                {
+                    GameObject inst = GameObject.Instantiate(prefabFullCollumn, trans);
+                    inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
+                    inst.transform.parent = level.transform;
                 }
             }
         }
-    }
-
-    private void getMaterial(GameObject inst)
-    {
-        MeshRenderer[] meshes;
-        meshes = inst.GetComponentsInChildren<MeshRenderer>();
-        foreach(MeshRenderer mesh in meshes)
-        {
-            mesh.material = levelMaterial;
-        }
-        MaterialChange();
     }
 
     //rotacion pared
