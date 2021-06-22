@@ -10,21 +10,21 @@ public class Tutotial : EditorWindow
         GUILayout.Label("Tutorial", EditorStyles.boldLabel);
         EditorGUILayout.Space();
         EditorGUILayout.Space();
-        GUILayout.Label("Instrucciones:", EditorStyles.boldLabel);
-        GUILayout.Label("1- Inserta los prefab en la ranura Prefab de cada color");
-        GUILayout.Label("2- Inserta una textura del mapa deseado en la ranura Map blueprint");
-        GUILayout.Label("3- Pulsa Generar para visualizar tu mapa");
+        GUILayout.Label("Introduction:", EditorStyles.boldLabel);
+        GUILayout.Label("1- Insert prefabs into each color's Prefab slot");
+        GUILayout.Label("2- Inserts a texture of the desired map into the Map blueprint slot");
+        GUILayout.Label("3- Press Generate to view your map");
         EditorGUILayout.Space();
         EditorGUILayout.Space();
-        GUILayout.Label("Creador de Prefab:", EditorStyles.boldLabel);
-        GUILayout.Label("1- Arrastre el nivel a la ventana de prefab");
-        GUILayout.Label("2- Cambie el nombre del prefab a su voluntad");
-        GUILayout.Label("3- Pulsa Create Prefab para guardar su prefab");
+        GUILayout.Label("Prefab Creator:", EditorStyles.boldLabel);
+        GUILayout.Label("1- Drag the level to the prefab window");
+        GUILayout.Label("2- Rename the prefab at your will");
+        GUILayout.Label("3- Press Create Prefab to save your prefab");
         GUILayout.Label("Nota:", EditorStyles.boldLabel);
-        GUILayout.Label("Puede crear una carpeta y guardar su prefab en ese lugar");
-        GUILayout.Label("1- Escriba el nombre de la carpeta");
-        GUILayout.Label("2- puede crear un Path si desea ubicarlo dentro de otra carpeta");
-        GUILayout.Label("3- Pulse el boton Crear Carpeta");
+        GUILayout.Label("You can create a folder and save your prefab there");
+        GUILayout.Label("1- Type the name of the folder");
+        GUILayout.Label("2- you can create a Path if you want to place it inside another folder");
+        GUILayout.Label("3- Press the Create Folder button");
 
     }
 }

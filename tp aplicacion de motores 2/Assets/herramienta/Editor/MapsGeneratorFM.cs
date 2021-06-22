@@ -96,7 +96,12 @@ public class MapsGeneratorFM : EditorWindow
         EditorGUILayout.Space();
         if (GUILayout.Button("Generate"))
         {
-            EmptyObjectDad();
+            if (!Map2D)
+            {
+                var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+                window.ShowNotification(new GUIContent("Missing slot"));
+            }
+            else EmptyObjectDad();
         }
 
         EditorGUILayout.Space();
@@ -118,6 +123,7 @@ public class MapsGeneratorFM : EditorWindow
     private void EmptyObjectDad()
     {
         GameObject level = new GameObject("Level" + i++);
+       
         GenerateMap(level);
     }
 
