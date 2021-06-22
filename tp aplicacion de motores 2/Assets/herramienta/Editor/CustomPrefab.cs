@@ -18,10 +18,14 @@ public class CustomPrefab : EditorWindow
 
     private void OnGUI()
     {
-       CreateFolders();
+        GUILayout.Label("- Folder Creator", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
+        CreateFolders();
 
         GUILayout.Space(20);
 
+        GUILayout.Label("- Prefab Creator", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
         PrefabGameObject = (GameObject)EditorGUILayout.ObjectField("Insert Prefab:", PrefabGameObject, typeof(GameObject), true);
 
         if (PrefabGameObject != null)
@@ -75,7 +79,7 @@ public class CustomPrefab : EditorWindow
         folderName = EditorGUILayout.TextField("Name:", folderName);
         pathToFolder = EditorGUILayout.TextField("Path Name:", pathToFolder);
 
-        if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Crear carpeta"))
+        if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Create Folder"))
         {
             var pathTemp = pathToFolder; 
 

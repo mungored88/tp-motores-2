@@ -48,7 +48,7 @@ public class MapsGeneratorFM : EditorWindow
 
             GUI.DrawTexture(GUILayoutUtility.GetRect(80, 120), (Texture)Resources.Load("Mini Tutorial"), ScaleMode.ScaleToFit);
 
-            if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Mas info"))
+            if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "More info"))
             {
                 GetWindow(typeof(Tutotial)).Show();
             }
@@ -84,7 +84,7 @@ public class MapsGeneratorFM : EditorWindow
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(" MAgenta || Full Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
+            GUILayout.Label(" Magenta || Full Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
             prefabFullCollumn = EditorGUILayout.ObjectField(prefabFullCollumn, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
