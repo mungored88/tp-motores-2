@@ -99,7 +99,7 @@ public class MapsGeneratorFM : EditorWindow
             if (!Map2D)
             {
                 var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
-                window.ShowNotification(new GUIContent("Missing slot"));
+                window.ShowNotification(new GUIContent("Missing blueprint map slot"));
             }
             else EmptyObjectDad();
         }
@@ -122,9 +122,17 @@ public class MapsGeneratorFM : EditorWindow
     //Creo el mapa adentro de un empty object
     private void EmptyObjectDad()
     {
-        GameObject level = new GameObject("Level" + i++);
-       
-        GenerateMap(level);
+        
+        if (!prefabFloor || !prefabWall || !prefabCorner || !prefabCollumn || !prefabFullCollumn || !prefabCenterC)
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's slot"));
+        }
+        else {
+            GameObject level = new GameObject("Level" + i++);
+
+            GenerateMap(level);
+        }
     }
 
     // Cambio el material
