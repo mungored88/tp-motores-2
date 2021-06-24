@@ -106,7 +106,7 @@ public class MapsGeneratorFM : EditorWindow
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
-        if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Make Prefab"))
+        if (GUILayout.Button("Make Prefab"))
         {
             GetWindow(typeof(CustomPrefab)).Show();
         }
@@ -247,6 +247,16 @@ public class MapsGeneratorFM : EditorWindow
         if (((pixels[i * height + j + 1] == Color.black)) && ((pixels[(i - 1) * height + j] == Color.black)))
             rotation = 90;
         return rotation;
+    }
+
+    // Devuelve un random prefab de cada array de objetos
+    private GameObject randomPrefab(GameObject[] prefabArray) 
+    {
+        if (prefabArray.Length > 0)
+        {
+            return prefabArray[Random.Range(0, prefabArray.Length - 1)];
+        }
+        return null;
     }
 
 }
