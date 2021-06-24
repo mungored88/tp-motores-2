@@ -7,17 +7,17 @@ using UnityEditor;
 public class MapsGeneratorFM : EditorWindow
 {
     int i = 0;
-    AnimBool animBool;
+    AnimBool animBool, animBoolWhite, animBoolRed, animBoolGreen, animBoolBlue, animBoolCyan, animBoolMagenta;
 
     public Transform trans;
     public float TileDimension = 4f;
-
-    public GameObject prefabFloor;
-    public GameObject prefabWall;
-    public GameObject prefabCorner;
-    public GameObject prefabCollumn;
-    public GameObject prefabFullCollumn;
-    public GameObject prefabCenterC;
+    public int varSize;
+    public GameObject[] prefabFloor;
+    public GameObject[] prefabWall;
+    public GameObject[] prefabCorner;
+    public GameObject[] prefabCollumn;
+    public GameObject[] prefabFullCollumn;
+    public GameObject[] prefabCenterC;
     public Texture2D  Map2D;
 
     private int width;
@@ -36,6 +36,9 @@ public class MapsGeneratorFM : EditorWindow
         CheckEvent();
         animBool = new AnimBool(false); //Creación de nuestra clase para poder animar cosas.
         animBool.valueChanged.AddListener(Repaint);
+
+        animBoolWhite = new AnimBool(false);
+        animBoolWhite.valueChanged.AddListener(Repaint);
     }
 
     private void OnGUI()
@@ -58,34 +61,54 @@ public class MapsGeneratorFM : EditorWindow
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
 
+        animBoolWhite.target = EditorGUILayout.Foldout(animBoolWhite.target, "White - Floor");
+        if(animBoolWhite.target == true)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Size", GUILayout.Width(150), GUILayout.ExpandWidth(true));
+            prefabFloor.Length = EditorGUILayout.IntField(varSize);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            for (int i = 0; i < prefabFloor.Length; i++)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Variant" + i, GUILayout.Width(150), GUILayout.ExpandWidth(true));
+                prefabFloor[i] = EditorGUILayout.ObjectField(prefabFloor[i], typeof(GameObject), true) as GameObject;
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndHorizontal();
+        }
+
+
             GUILayout.BeginHorizontal();
             GUILayout.Label(" White || Floor", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabFloor = EditorGUILayout.ObjectField(prefabFloor, typeof(GameObject), true) as GameObject;
+            //prefabFloor = EditorGUILayout.ObjectField(prefabFloor, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(" Red || Wall", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabWall = EditorGUILayout.ObjectField(prefabWall, typeof(GameObject), true) as GameObject;
+            //prefabWall = EditorGUILayout.ObjectField(prefabWall, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(" Green || Outer Corner", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabCorner = EditorGUILayout.ObjectField(prefabCorner, typeof(GameObject), true) as GameObject;
+            //prefabCorner = EditorGUILayout.ObjectField(prefabCorner, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(" Blue || Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabCollumn = EditorGUILayout.ObjectField(prefabCollumn, typeof(GameObject), true) as GameObject;
+            //prefabCollumn = EditorGUILayout.ObjectField(prefabCollumn, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(" Cyan || Center Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
+            //prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label(" Magenta || Full Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabFullCollumn = EditorGUILayout.ObjectField(prefabFullCollumn, typeof(GameObject), true) as GameObject;
+            //prefabFullCollumn = EditorGUILayout.ObjectField(prefabFullCollumn, typeof(GameObject), true) as GameObject;
             GUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
@@ -123,12 +146,12 @@ public class MapsGeneratorFM : EditorWindow
     private void EmptyObjectDad()
     {
         
-        if (!prefabFloor || !prefabWall || !prefabCorner || !prefabCollumn || !prefabFullCollumn || !prefabCenterC)
+        /*if (!prefabFloor || !prefabWall || !prefabCorner || !prefabCollumn || !prefabFullCollumn || !prefabCenterC)
         {
             var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
             window.ShowNotification(new GUIContent("Missing prefab's slot"));
         }
-        else {
+        else */{
             GameObject level = new GameObject("Level" + i++);
 
             GenerateMap(level);
@@ -158,40 +181,40 @@ public class MapsGeneratorFM : EditorWindow
                 Color pixelColor = pixels[i * height + j];
                 if (pixelColor == Color.white)
                 {                              //Floor
-                    GameObject inst = GameObject.Instantiate(prefabFloor, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabFloor), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.parent = level.transform;
                 }
                 if (pixelColor == Color.red)   //Wall
                 {
-                    GameObject inst = GameObject.Instantiate(prefabWall, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabWall), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationW(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
                 }
                 if (pixelColor == Color.green) //Corner
                 {
-                    GameObject inst = GameObject.Instantiate(prefabCorner, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabCorner), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationL(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
                 }
                 if (pixelColor == Color.blue) //Collumn
                 {
-                    GameObject inst = GameObject.Instantiate(prefabCollumn, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabCollumn), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.Rotate(new Vector3(0, FindRotationC(pixels, i, j), 0), Space.Self);
                     inst.transform.parent = level.transform;
                 }
                 if (pixelColor == Color.cyan) //Center Collumn
                 { 
-                    GameObject inst = GameObject.Instantiate(prefabCenterC, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabCenterC), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.parent = level.transform;
                 }
                 if (pixelColor == Color.magenta) //Full Collumn
                 {
-                    GameObject inst = GameObject.Instantiate(prefabFullCollumn, trans);
+                    GameObject inst = GameObject.Instantiate(randomPrefab(prefabFullCollumn), trans);
                     inst.transform.position = new Vector3(j * multiplierFactor, 0, i * multiplierFactor);
                     inst.transform.parent = level.transform;
                 }
