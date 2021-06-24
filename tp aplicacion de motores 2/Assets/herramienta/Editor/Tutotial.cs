@@ -12,7 +12,7 @@ public class Tutotial : EditorWindow
     }
     void CheckEvent()
     {
-        minSize = new Vector2(400, 400);
-        maxSize = new Vector3(400, 400);
+        minSize = new Vector2(600, 600);
+        maxSize = new Vector3(600, 600);
     }
 }
