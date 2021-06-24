@@ -66,7 +66,7 @@ public class MapsGeneratorFM : EditorWindow
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Size", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabFloor.Length = EditorGUILayout.IntField(varSize);
+            prefabFloor.Lenght = EditorGUILayout.IntField(varSize);
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
