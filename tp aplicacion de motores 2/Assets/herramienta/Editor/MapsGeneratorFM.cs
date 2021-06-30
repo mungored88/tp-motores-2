@@ -67,17 +67,40 @@ public class MapsGeneratorFM : EditorWindow
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
 
-        GUILayout.Label("White");
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("White", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("white"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabFloor");
-        GUILayout.Label("Red");
+
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("Red", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("red"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabWall");
-        GUILayout.Label("Green");
+
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("Green", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("green"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabCorner");
-        GUILayout.Label("Blue");
+
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("Blue", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("blue"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabCollumn");
-        GUILayout.Label("Cyan");
+
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("Cyan", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("cyan"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabFullCollumn");
-        GUILayout.Label("Magenta");
+
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
+        GUILayout.Label("Magenta", GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetRect(200, 5), (Texture)Resources.Load("magenta"), ScaleMode.StretchToFill);
+        GUILayout.EndHorizontal();
             ShowArrays("prefabCenterC");
 
         EditorGUILayout.Space();
