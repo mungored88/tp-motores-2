@@ -4,14 +4,15 @@ using UnityEditor.AnimatedValues;
 using UnityEngine;
 using UnityEditor;
 
+
 public class MapsGeneratorFM : EditorWindow
 {
-    int i = 0;
     AnimBool animBool, animBoolWhite, animBoolRed, animBoolGreen, animBoolBlue, animBoolCyan, animBoolMagenta;
+    int levelCount = 0;
 
     public Transform trans;
     public float TileDimension = 4f;
-    public int varSize;
+
     public GameObject[] prefabFloor;
     public GameObject[] prefabWall;
     public GameObject[] prefabCorner;
@@ -19,7 +20,8 @@ public class MapsGeneratorFM : EditorWindow
     public GameObject[] prefabFullCollumn;
     public GameObject[] prefabCenterC;
     public Texture2D  Map2D;
-
+    public Vector2 scrollPos;
+    
     private int width;
     private int height;
 
@@ -43,6 +45,10 @@ public class MapsGeneratorFM : EditorWindow
 
     private void OnGUI()
     {
+        EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
+        
+
         EditorGUILayout.Space();
         animBool.target = EditorGUILayout.Foldout(animBool.target, "- Tutorial"); //flecha para ocultar cosas
         if (animBool.target == true)
@@ -61,55 +67,18 @@ public class MapsGeneratorFM : EditorWindow
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Prefabs", EditorStyles.boldLabel);
 
-        animBoolWhite.target = EditorGUILayout.Foldout(animBoolWhite.target, "White - Floor");
-        if(animBoolWhite.target == true)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Size", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            prefabFloor.Lenght = EditorGUILayout.IntField(varSize);
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            for (int i = 0; i < prefabFloor.Length; i++)
-            {
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Variant" + i, GUILayout.Width(150), GUILayout.ExpandWidth(true));
-                prefabFloor[i] = EditorGUILayout.ObjectField(prefabFloor[i], typeof(GameObject), true) as GameObject;
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndHorizontal();
-        }
-
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" White || Floor", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabFloor = EditorGUILayout.ObjectField(prefabFloor, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" Red || Wall", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabWall = EditorGUILayout.ObjectField(prefabWall, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" Green || Outer Corner", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabCorner = EditorGUILayout.ObjectField(prefabCorner, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" Blue || Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabCollumn = EditorGUILayout.ObjectField(prefabCollumn, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" Cyan || Center Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabCenterC = EditorGUILayout.ObjectField(prefabCenterC, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(" Magenta || Full Collumn", GUILayout.Width(150), GUILayout.ExpandWidth(true));
-            //prefabFullCollumn = EditorGUILayout.ObjectField(prefabFullCollumn, typeof(GameObject), true) as GameObject;
-            GUILayout.EndHorizontal();
+        GUILayout.Label("White");
+            ShowArrays("prefabFloor");
+        GUILayout.Label("Red");
+            ShowArrays("prefabWall");
+        GUILayout.Label("Green");
+            ShowArrays("prefabCorner");
+        GUILayout.Label("Blue");
+            ShowArrays("prefabCollumn");
+        GUILayout.Label("Cyan");
+            ShowArrays("prefabFullCollumn");
+        GUILayout.Label("Magenta");
+            ShowArrays("prefabCenterC");
 
         EditorGUILayout.Space();
         GUILayout.Label("- Insert Map Blueprint", EditorStyles.boldLabel);
@@ -134,26 +103,80 @@ public class MapsGeneratorFM : EditorWindow
             GetWindow(typeof(CustomPrefab)).Show();
         }
 
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
+    }
+
+    void ShowArrays(string prefabName)
+    {
+        GUILayout.BeginHorizontal();
+            ScriptableObject target = this;
+            SerializedObject so = new SerializedObject(target);
+            SerializedProperty gameObjectProperty = so.FindProperty(prefabName);
+            EditorGUILayout.PropertyField(gameObjectProperty, true);
+            so.ApplyModifiedProperties();
+        GUILayout.EndHorizontal();
+    }
+
+    bool CheckArrays(GameObject[] arrayToCheck)
+    {
+        foreach (GameObject i in arrayToCheck)
+        {
+            if (!i)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void CheckEvent()
     {
-        minSize = new Vector2(400, 350);
-        maxSize = new Vector3 (400, 350);
+        minSize = new Vector2(300, 200);
+        maxSize = new Vector3 (900, 800);
     }
 
     //Creo el mapa adentro de un empty object
     private void EmptyObjectDad()
     {
-        
-        /*if (!prefabFloor || !prefabWall || !prefabCorner || !prefabCollumn || !prefabFullCollumn || !prefabCenterC)
+        if (prefabFloor.Length == 0 || prefabWall.Length == 0 || prefabCorner.Length == 0 || prefabCollumn.Length == 0 || prefabFullCollumn.Length == 0 || prefabCenterC.Length == 0)
         {
             var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
             window.ShowNotification(new GUIContent("Missing prefab's slot"));
         }
-        else */{
-            GameObject level = new GameObject("Level" + i++);
-
+        else if(!CheckArrays(prefabFloor))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Floor slot"));
+        }
+        else if (!CheckArrays(prefabWall))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Wall slot"));
+        }
+        else if (!CheckArrays(prefabCorner))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Corner slot"));
+        }
+        else if (!CheckArrays(prefabCollumn))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Collumn slot"));
+        }
+        else if (!CheckArrays(prefabFullCollumn))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Collumn slot"));
+        }
+        else if (!CheckArrays(prefabCenterC))
+        {
+            var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+            window.ShowNotification(new GUIContent("Missing prefab's in Center Collumn slot"));
+        }
+        else
+        {
+            GameObject level = new GameObject("Level" + levelCount++);
             GenerateMap(level);
         }
     }
@@ -281,5 +304,4 @@ public class MapsGeneratorFM : EditorWindow
         }
         return null;
     }
-
 }

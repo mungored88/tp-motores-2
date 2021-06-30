@@ -6,6 +6,7 @@ using UnityEditor;
 
 public class CustomPrefab : EditorWindow
 {
+    Vector2 scrollPos;
     GameObject PrefabGameObject;
     string ObjectName = "Default";
 
@@ -18,8 +19,12 @@ public class CustomPrefab : EditorWindow
 
     private void OnGUI()
     {
+        EditorGUILayout.BeginVertical(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
+
         GUILayout.Label("- Folder Creator", EditorStyles.boldLabel);
         EditorGUILayout.Space();
+        
         CreateFolders();
 
         GUILayout.Space(20);
@@ -40,6 +45,9 @@ public class CustomPrefab : EditorWindow
             else
                 PrefabSettings();
         }
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 
     void PrefabSettings()
@@ -81,24 +89,33 @@ public class CustomPrefab : EditorWindow
 
         if (GUI.Button(GUILayoutUtility.GetRect(20, 20), "Create Folder"))
         {
-            var pathTemp = pathToFolder; 
-
-            if (!string.IsNullOrEmpty(pathTemp) && !string.IsNullOrWhiteSpace(pathTemp)) 
-                pathTemp = "Assets/" + pathTemp; 
-
-            if (AssetDatabase.IsValidFolder(pathTemp)) 
+            if (folderName == "")
             {
-                
-                AssetDatabase.CreateFolder(pathTemp, folderName);
-                
-            }else
-            {
-               
-                pathTemp = "Assets";
-                AssetDatabase.CreateFolder(pathTemp, folderName);
+                var window = (MapsGeneratorFM)GetWindow(typeof(MapsGeneratorFM));
+                window.ShowNotification(new GUIContent("Missing folder name"));
             }
-            pathToFolder = pathTemp +  "/" + folderName;
-            SaveAssets();
+            else
+            {
+                var pathTemp = pathToFolder;
+
+                if (!string.IsNullOrEmpty(pathTemp) && !string.IsNullOrWhiteSpace(pathTemp))
+                    pathTemp = "Assets/" + pathTemp;
+
+                if (AssetDatabase.IsValidFolder(pathTemp))
+                {
+
+                    AssetDatabase.CreateFolder(pathTemp, folderName);
+
+                }
+                else
+                {
+
+                    pathTemp = "Assets";
+                    AssetDatabase.CreateFolder(pathTemp, folderName);
+                }
+                pathToFolder = pathTemp + "/" + folderName;
+                SaveAssets();
+            }
         }
     }
 
